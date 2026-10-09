@@ -1,0 +1,25 @@
+# ===== 虚拟环境（绝对不要提交）=====
+.venv/
+venv/
+env/
+
+# ===== Python 缓存 =====
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# ===== 测试产物 =====
+reports/
+allure-results/
+allure-report/
+*.log
+
+# ===== 编辑器 =====
+.vscode/
+.idea/
+
+# ===== 操作系统 =====
+Thumbs.db
+Desktop.ini
+.DS_Store

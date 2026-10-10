@@ -30,6 +30,12 @@ def _build_options():
     options.add_argument("--window-size=1280,900")
     options.add_argument("--no-first-run")
     options.add_argument("--no-default-browser-check")
+    # ★ 关键：无痕模式。
+    # 因为 --user-data-dir 是复用的，上一次跑测试留下的 localStorage
+    # （比如购物车里的商品）会带到这一次，导致用例莫名其妙地失败。
+    # 这种"脏数据"引起的失败叫 flaky test，是自动化测试的头号敌人。
+    # 无痕模式保证每个用例都在干净的环境里开始。
+    options.add_argument("--inprivate")
     # 以下参数用于在受限环境（CI 服务器、沙箱）中稳定启动
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-gpu")
@@ -40,10 +46,29 @@ def _build_options():
     return options
 
 
+def _reset_storage(drv):
+    """清空浏览器里残留的 localStorage / sessionStorage / cookie。
+
+    【为什么必须做这一步】
+    因为 --user-data-dir 是复用的，上一次跑测试时加进购物车的商品、
+    留下的登录状态，会原封不动地带到这一次来。
+    这种"脏数据"会让用例莫名其妙地失败，或者这次过、下次不过。
+
+    【它叫什么】
+    这种不稳定现象叫 flaky test（抖动用例），是自动化测试的头号敌人。
+    面试时被问到"你怎么保证用例稳定"，这就是标准答案之一：
+    「每个用例开始前显式清理环境状态，不依赖上一个用例的结果。」
+    """
+    drv.get(BASE_URL)
+    drv.execute_script("window.localStorage.clear(); window.sessionStorage.clear();")
+    drv.delete_all_cookies()
+
+
 @pytest.fixture
 def driver():
     """提供一个干净的浏览器，用完自动关闭。"""
     drv = webdriver.Edge(options=_build_options())
+    _reset_storage(drv)
     yield drv
     drv.quit()
 

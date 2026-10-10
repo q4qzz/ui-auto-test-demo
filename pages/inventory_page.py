@@ -65,50 +65,58 @@ class InventoryPage:
         return self.URL_KEYWORD in self.driver.current_url
 
     # ==========================================================
-    # TODO 区域 —— 这一整段要你自己写
-    # 写之前先看 docs/Day3-任务书.md 的第一部分（F12 找元素）
+    # TODO 区域 —— 全部是「填空」，每个空只填一个词或一行
+    #
+    # 先读 docs/Selenium最小知识卡.md（5 分钟），再回来填。
+    # 填空处都标了 ★
     # ==========================================================
 
-    # ---------- TODO 1：补全下面 3 个定位器 ----------
-    # 打开 F12，把鼠标点到页面上的元素上，看它的 HTML 属性
-    #
-    # 提示：
-    #   - 加购按钮有 6 个，data-test 都以 "add-to-cart" 开头
-    #   - 购物车角标的 class 是 shopping_cart_ 开头
-    #   - 购物车图标的 class 也是 shopping_cart_ 开头
+    # ---------- TODO 1：抄 3 个 class 名 ----------
+    # 双击 run_inspect.bat，看【第 2 页】输出的 class 列，
+    # 把对应的内容抄进下面两个空里（不要抄引号）
 
-    ADD_TO_CART_BUTTON = (By.CSS_SELECTOR, "???")   # ← 你自己填
-    CART_BADGE = (By.CLASS_NAME, "???")             # ← 你自己填
-    CART_LINK = (By.CLASS_NAME, "???")              # ← 你自己填
+    # 这个我写好了，当示范：
+    # data-test 以 add-to-cart 开头的按钮，一次匹配全部 6 个
+    ADD_TO_CART_BUTTON = (By.CSS_SELECTOR, "[data-test^='add-to-cart']")
 
-    # ---------- TODO 2：把前 n 件商品加入购物车 ----------
+    # ★ 空 1：购物车角标的 class（探针输出里找 shopping_cart_badge）
+    CART_BADGE = (By.CLASS_NAME, "shopping_cart_badge")
+
+    # ★ 空 2：购物车图标的 class（探针输出里找 shopping_cart_link）
+    CART_LINK = (By.CLASS_NAME, "shopping_cart_link")
+
+    # ---------- TODO 2：只填一行 ----------
     def add_first_n_to_cart(self, n):
-        """把商品列表里的前 n 件商品加入购物车。
+        """把前 n 件商品加入购物车。
 
-        思路：
-          1. 用 find_elements 找到所有加购按钮（注意是复数）
-          2. 循环取前 n 个，逐个 .click()
-          3. 记得返回 self，这样能链式调用
-
-        提示：buttons = self.driver.find_elements(*self.ADD_TO_CART_BUTTON)
-             然后 buttons[:n] 就是前 n 个
+        下面代码我都写好了，只有一个空要你填。
         """
-        raise NotImplementedError("TODO 2 还没写")
+        buttons = self.driver.find_elements(*self.ADD_TO_CART_BUTTON)
+        for b in buttons[:n]:
+            b.click()
+        return self
 
-    # ---------- TODO 3：读取购物车角标数字 ----------
+    # ---------- TODO 3：只填一行 ----------
     @property
     def cart_badge_count(self):
-        """返回购物车角标上的数字。
+        """返回购物车角标上的数字；没有角标时返回 0。
 
-        重点：加购【之前】页面上根本没有角标这个元素。
-              所以必须用 find_elements（复数），它找不到时返回空列表，
-              而不是像 find_element 那样直接抛异常。
-
-        返回：int，没有角标时返回 0
+        这个我也写好了大半，只有一个空。
         """
-        raise NotImplementedError("TODO 3 还没写")
+        badges = self.driver.find_elements(*self.CART_BADGE)
+        if not badges:
+            return 0
+        # ★ 空 4：badges[0].text 读到的是字符串 "2"，
+        #         要把它变成数字 2 再返回。想想用哪个内置函数？
+        return int(badges[0].text)
 
-    # ---------- TODO 4：进入购物车页 ----------
+    # ---------- TODO 4：照抄 TODO 2 的写法，自己写一个 ----------
     def open_cart(self):
-        """点击右上角的购物车图标，进入购物车页。"""
-        raise NotImplementedError("TODO 4 还没写")
+        """点击右上角的购物车图标，进入购物车页。
+
+        参照上面「动作 5」的示范：
+            self.driver.find_element(*self.CART_LINK).click()
+            return self
+        """
+        self.driver.find_element(*self.CART_LINK).click()
+        return self

@@ -15,6 +15,12 @@ allure-results/
 allure-report/
 *.log
 
+# ===== 自动化测试运行时产物 =====
+.edge-profile/
+.cache/
+.tmp/
+msedgedriver/
+
 # ===== 编辑器 =====
 .vscode/
 .idea/

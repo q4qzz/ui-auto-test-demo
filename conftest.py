@@ -62,6 +62,8 @@ def _reset_storage(drv):
     drv.get(BASE_URL)
     drv.execute_script("window.localStorage.clear(); window.sessionStorage.clear();")
     drv.delete_all_cookies()
+    # 最后回到空白页，让每个用例都从"还没打开任何网页"的状态开始
+    drv.get("about:blank")
 
 
 @pytest.fixture

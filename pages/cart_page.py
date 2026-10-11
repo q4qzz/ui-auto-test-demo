@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
-"""购物车页的页面对象（Page Object）。
+"""购物车页的页面对象（Page Object）—— 全部是填空题。
 
-【这个文件是骨架，要你自己填】
-定位器全是 "???"，请打开浏览器按 F12，自己找出真实的属性值。
+【先做什么】
+1. 读 docs/Selenium最小知识卡.md（5 分钟）
+2. 双击 run_inspect.bat，把输出留在屏幕上当"答案纸"
 
-【怎么做】
-1. 手动登录 saucedemo，随便加 2 件商品，点进购物车页
-2. 按 F12，用左上角的箭头点页面上的元素
-3. 看 HTML 里的 id / class / data-test 属性
-4. 按 docs/Day3-任务书.md 里的「定位器优先级」挑一个写进来
+【填空说明】
+每个空都标了 ★，只需要填一个词或一行，不用写整个方法。
 """
 
 from selenium.webdriver.common.by import By
@@ -19,22 +17,33 @@ from selenium.webdriver.support.ui import WebDriverWait
 class CartPage:
     """saucedemo 购物车页。"""
 
-    # URL 里出现这一段，就说明在购物车页
     URL_KEYWORD = "cart"
 
-    # ---------- TODO 5：补全下面 3 个定位器 ----------
-    # 自己用 F12 找，不要猜
+    # ==========================================================
+    # 填空区
+    # ==========================================================
 
-    CART_ITEM = (By.CLASS_NAME, "???")      # 购物车里的一个"条目"（一整行）
-    ITEM_NAME = (By.CLASS_NAME, "???")      # 条目里商品名称的文字
-    CHECKOUT_BUTTON = (By.ID, "???")        # 结账按钮
+    # ---------- TODO 5：抄 3 个属性 ----------
+    # 跑 run_inspect.bat，看【第 3 页】购物车页的输出
+
+    # ★ 空 5：购物车里"一个条目"（一整行）的 class
+    #   提示：探针会额外打印「购物车里一个条目的完整 HTML」，
+    #        看最外层 <div class="..."> 里的内容
+    CART_ITEM = (By.CLASS_NAME, "★这里填★")
+
+    # ★ 空 6：条目里"商品名称"的 class
+    #   提示：探针最后会打印「商品名元素的 class」，直接抄
+    ITEM_NAME = (By.CLASS_NAME, "★这里填★")
+
+    # ★ 空 7：结账按钮的 id
+    #   提示：【第 3 页】的表格里，找文字是 Checkout 的那一行，看它的 id 列
+    CHECKOUT_BUTTON = (By.ID, "★这里填★")
 
     def __init__(self, driver, timeout=10):
         self.driver = driver
         self.wait = WebDriverWait(driver, timeout)
 
-    # ---------- 这个我帮你写好了，当参考 ----------
-
+    # ---------- 这个我写好了，当参考，不用改 ----------
     def wait_until_loaded(self, timeout=10):
         """等待购物车页真正加载出来。"""
         WebDriverWait(self.driver, timeout).until(
@@ -45,28 +54,38 @@ class CartPage:
         )
         return self
 
-    # ---------- TODO 6：购物车里有几件商品 ----------
+    # ---------- TODO 6：只填一行 ----------
     @property
     def item_count(self):
-        """返回购物车里的商品条数（int）。
+        """购物车里有几件商品。
 
-        提示：跟 InventoryPage.item_count 是一个写法。
+        find_elements 找出所有条目，返回列表。
+        ★ 空 8：怎么数出这个列表里有几个？用哪个内置函数？
+        （看 docs/Selenium最小知识卡.md 最下面的「五分钟小测」）
         """
-        raise NotImplementedError("TODO 6 还没写")
+        items = self.driver.find_elements(*self.CART_ITEM)
+        return ★这里填★(items)
 
-    # ---------- TODO 7：所有商品名称 ----------
+    # ---------- TODO 7：只填一行 ----------
     @property
     def item_names(self):
-        """返回购物车里所有商品名称组成的列表（list[str]）。
+        """购物车里所有商品的名称，返回列表。
 
-        提示：用列表推导式，参考 InventoryPage.item_names。
+        下面这行"列表推导式"的意思是：
+          把每个条目的名称文字，收集成一个新列表
+
+        ★ 空 9：从每个条目里把商品名称元素找出来，再取它的 .text
+               提示：条目.find_element(*self.ITEM_NAME).text
         """
-        raise NotImplementedError("TODO 7 还没写")
+        items = self.driver.find_elements(*self.CART_ITEM)
+        return [★这里填★ for item in items]
 
-    # ---------- TODO 8：点击结账按钮 ----------
+    # ---------- TODO 8：照抄示范，自己写 ----------
     def click_checkout(self):
         """点击 Checkout 按钮。
 
-        提示：先 find_element，再 .click()，最后 return self。
+        照着 inventory_page.py 里 open_cart() 的写法来：
+            self.driver.find_element(*self.某定位器).click()
+            return self
         """
-        raise NotImplementedError("TODO 8 还没写")
+        ★这一整行你自己写★

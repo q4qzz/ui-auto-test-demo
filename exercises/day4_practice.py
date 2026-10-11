@@ -109,7 +109,7 @@ def 进购物车(driver, 超时=10):
 def test_A1_打开登录页(driver):
     """A1：让浏览器打开 saucedemo 登录页。写 1 行。"""
     # ======== 你的代码写在这行下面 ========
-
+    driver.get(BASE_URL)
 
     # ======== 下面是自动批改，不要动 ========
     assert "saucedemo.com" in driver.current_url, (
@@ -125,6 +125,7 @@ def test_A2_在用户名框输入(driver):
     """
     driver.get(BASE_URL)
     # ======== 你的代码写在这行下面 ========
+    driver.find_element(By.ID, "user-name").send_keys("standard_user")
 
 
     # ======== 自动批改 ========
@@ -142,6 +143,8 @@ def test_A3_在密码框输入(driver):
     """
     driver.get(BASE_URL)
     # ======== 你的代码写在这行下面 ========
+    driver.find_element(By.ID, "password").send_keys("secret_sauce")
+
 
 
     # ======== 自动批改 ========

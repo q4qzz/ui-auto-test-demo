@@ -225,8 +225,8 @@ def test_B1_数一数有几个加购按钮(driver):
     """
     登录(driver)
     # ======== 你的代码写在这行下面（2 行）========
-
-
+    buttons = driver.find_elements(By.CSS_SELECTOR, ADD_TO_CART)
+    count = len(buttons)
     # ======== 自动批改 ========
     assert count == 6, (
         f"❌ 你数出来是 {count}，应该是 6\n"
@@ -242,7 +242,7 @@ def test_B2_取出所有商品名(driver):
     """
     登录(driver)
     # ======== 你的代码写在这行下面 ========
-
+    names = [e.text for e in driver.find_elements(By.CLASS_NAME, "inventory_item_name")]
 
     # ======== 自动批改 ========
     assert len(names) == 6, f"❌ 应该取到 6 个商品名，你取到 {len(names)} 个"
@@ -258,7 +258,7 @@ def test_B3_取出所有价格(driver):
     """
     登录(driver)
     # ======== 你的代码写在这行下面 ========
-
+    prices = [e.text for e in driver.find_elements(By.CLASS_NAME, "inventory_item_price")]
 
     # ======== 自动批改 ========
     assert len(prices) == 6, f"❌ 应该取到 6 个价格，你取到 {len(prices)} 个"
@@ -272,7 +272,8 @@ def test_B4_点击第一个加购按钮(driver):
     """
     登录(driver)
     # ======== 你的代码写在这行下面（2 行）========
-
+    buttons  = driver.find_elements(By.CSS_SELECTOR,ADD_TO_CART)
+    buttons[0].click()
 
     # ======== 自动批改 ========
     badge = driver.find_elements(By.CLASS_NAME, "shopping_cart_badge")
@@ -300,7 +301,10 @@ def test_B5_加购两件并处理失效元素(driver):
     登录(driver)
     for _ in range(2):
         # ======== 你的代码写在这行下面（2 行）========
-        pass
+    
+        buttons  = driver.find_elements(By.CSS_SELECTOR,ADD_TO_CART)
+        buttons[0].click()
+
 
     # ======== 自动批改 ========
     badge = driver.find_elements(By.CLASS_NAME, "shopping_cart_badge")

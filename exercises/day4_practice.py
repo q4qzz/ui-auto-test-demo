@@ -163,6 +163,8 @@ def test_A4_先清空再输入(driver):
     box = driver.find_element(By.ID, "user-name")
     box.send_keys("这是错误的内容，请清掉")
     # ======== 你的代码写在这行下面（2 行）========
+    box.clear()
+    box.send_keys("standard_user")
 
 
     # ======== 自动批改 ========
@@ -180,8 +182,9 @@ def test_A5_完整登录(driver):
     """
     driver.get(BASE_URL)
     # ======== 你的代码写在这行下面（3 行）========
-
-
+    driver.find_element(By.ID, "user-name").send_keys("standard_user")
+    driver.find_element(By.ID, "password").send_keys("secret_sauce")
+    driver.find_element(By.ID,"login-button").click()
     # ======== 自动批改 ========
     assert "inventory" in driver.current_url, (
         f"❌ 没有登录成功，当前地址是 {driver.current_url!r}\n"
@@ -201,8 +204,7 @@ def test_A6_读取输入框里的内容(driver):
     driver.get(BASE_URL)
     driver.find_element(By.ID, "user-name").send_keys(USERNAME)
     # ======== 你的代码写在这行下面 ========
-
-
+    text = driver.find_element(By.ID, "user-name").get_attribute("value")
     # ======== 自动批改 ========
     assert text == "standard_user", (
         f"❌ 读到的内容是 {text!r}，应该是 'standard_user'\n"

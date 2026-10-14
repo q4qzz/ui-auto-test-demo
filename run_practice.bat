@@ -10,9 +10,9 @@ set TEMP=%~dp0.tmp
 set SE_CACHE_PATH=%~dp0.cache\selenium
 call .venv\Scripts\activate.bat
 echo ============================================
-echo   DAY 4 PRACTICE - 20 exercises
+echo   ALL exercises (30 items, about 2.5 minutes)
 echo ============================================
 echo.
-pytest exercises/day4_practice.py -v --tb=line
+pytest exercises -v --tb=line
 echo.
 pause

@@ -410,8 +410,8 @@ def test_D1_加购两件并检查角标(driver):
     """
     登录(driver)
     # ======== 你的代码写在这行下面（2 行）========
-
-
+    加购(driver,2)
+    n = int(driver.find_element(By.CLASS_NAME, "shopping_cart_badge").text)
     # ======== 自动批改 ========
     assert n == 2, f"❌ 角标数字是 {n!r}，应该是 2"
 
@@ -425,8 +425,8 @@ def test_D2_加购后进入购物车(driver):
     # ======== 你的代码写在这行下面（2 行）========
     # 第 1 行：加购(driver, 2)
     # 第 2 行：点购物车图标
-
-
+    加购(driver, 2)
+    进购物车(driver)
     # ======== 自动批改 ========
     # 点完之后网址不会立刻变，所以这里最多等 10 秒再看结果
     from time import sleep
@@ -454,7 +454,9 @@ def test_D3_断言购物车里有2件(driver):
     # 第 1 行：加购(driver, 2)
     # 第 2 行：进购物车(driver)
     # 第 3 行：n = 用 len 数出 cart_item 有几个
-
+    加购(driver, 2)
+    进购物车(driver)
+    n  = len(driver.find_elements(By.CLASS_NAME,"cart_item"))
 
     # ======== 自动批改 ========
     assert n == 2, f"❌ 购物车里的条数是 {n!r}，应该是 2"
@@ -478,8 +480,11 @@ def test_D4_断言商品名一致(driver):
     """
     登录(driver)
     # ======== 你的代码写在这行下面（5 行）========
-
-
+    inventory_names = (driver,"invertory_item_name")[:2]
+    加购(driver, 2)
+    进购物车(driver)
+    cart_names = (driver,"invertory_item_name")
+    assert inventory_names == cart_names
     # ======== 自动批改 ========
     assert inventory_names == cart_names, (
         f"❌ 两边商品名不一致\n   列表页前两件：{inventory_names}\n   购物车里：{cart_names}"

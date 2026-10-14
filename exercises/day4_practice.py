@@ -327,8 +327,7 @@ def test_C1_读角标文字(driver):
     登录(driver)
     driver.find_elements(By.CSS_SELECTOR, ADD_TO_CART)[0].click()
     # ======== 你的代码写在这行下面 ========
-
-
+    badge_text = driver.find_element(By.CLASS_NAME,"shopping_cart_badge").text
     # ======== 自动批改 ========
     assert badge_text == "1", (
         f"❌ 读到的是 {badge_text!r}，应该是 '1'（字符串，带引号）"
@@ -346,8 +345,8 @@ def test_C2_读角标并断言(driver):
     driver.find_elements(By.CSS_SELECTOR, ADD_TO_CART)[0].click()
     badge = driver.find_element(By.CLASS_NAME, "shopping_cart_badge")
     # ======== 你的代码写在这行下面（2 行）========
-
-
+    badge_text = badge.text
+    assert badge_text == "1"
     # ======== 自动批改 ========
     assert badge_text == "1", f"❌ badge_text 是 {badge_text!r}，应该是 '1'"
 
@@ -363,8 +362,8 @@ def test_C3_转成数字再断言(driver):
     driver.find_elements(By.CSS_SELECTOR, ADD_TO_CART)[0].click()
     badge = driver.find_element(By.CLASS_NAME, "shopping_cart_badge")
     # ======== 你的代码写在这行下面（2 行）========
-
-
+    n = int(badge.text)
+    assert n == 1
     # ======== 自动批改 ========
     assert n == 1, f"❌ n 是 {n!r}，应该是数字 1"
     assert isinstance(n, int), f"❌ n 的类型是 {type(n).__name__}，应该是 int"
@@ -377,8 +376,7 @@ def test_C4_读页面标题(driver):
     """
     登录(driver)
     # ======== 你的代码写在这行下面 ========
-
-
+    title = driver.find_element(By.CLASS_NAME,"title").text
     # ======== 自动批改 ========
     assert title == "Products", f"❌ 读到的是 {title!r}，应该是 'Products'"
 
@@ -393,8 +391,8 @@ def test_C5_断言在商品页(driver):
     """
     登录(driver)
     # ======== 你的代码写在这行下面（2 行）========
-
-
+    url = driver.current_url
+    assert"inventory" in url
     # ======== 自动批改 ========
     assert "inventory" in url, f"❌ url 是 {url!r}，里面应该有 inventory"
 

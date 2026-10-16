@@ -71,7 +71,8 @@ def test_E1_用显式等待等元素出现(driver):
     """
     driver.get(BASE_URL)
     # ======== 你的代码写在这行下面（2 行）========
-
+    wait = WebDriverWait(driver, 10)
+    btn = wait.until(EC.presence_of_element_located((By.ID, "login-button")))
 
     # ======== 自动批改 ========
     assert btn.get_attribute("value") == "Login", (
@@ -89,27 +90,37 @@ def test_E2_等待网址变化(driver):
     driver.find_element(By.ID, "user-name").send_keys(USERNAME)
     driver.find_element(By.ID, "password").send_keys(PASSWORD)
     driver.find_element(By.ID, "login-button").click()
+    WebDriverWait(driver, 10).until(EC.url_contains("inventory"))
     # ======== 你的代码写在这行下面（1~2 行）========
-
-
+    WebDriverWait(driver, 10).until(EC.url_contains("inventory"))
+    url = driver.current_url
     # ======== 自动批改 ========
     assert "inventory" in url, f"❌ url 是 {url!r}"
 
 
 def test_E3_三条断言验证一次登录(driver):
-    """E3：登录后，用【三条 assert】验证三个点：
-        1. 网址里有 inventory
-        2. 页面标题文字是 Products
-        3. 商品数量是 6
+    """E3：登录后，把三个值分别存进变量，每个各写一条 assert。
 
-    提示：用 find_elements 数商品（class 是 inventory_item）
-          每条 assert 后面都要写提示信息。
+    写 6 行：
+      1) url = 当前网址
+      2) assert "inventory" in url, "不在商品页"
+      3) 标题 = 标题元素的文字（class 是 title）
+      4) assert 标题 == "Products", "标题不对"
+      5) 数量 = 商品数量（用 len + find_elements，class 是 inventory_item）
+      6) assert 数量 == 6, "商品数量不对"
     """
     登录(driver)
-    # ======== 你的代码写在这行下面（3 行）========
-
-
-    # ======== 自动批改（这一题你的三条断言就是批改）========
+    # ======== 你的代码写在这行下面（6 行）========
+    url = driver.current_url
+    assert "inventory" in url, "不在商品页"
+    标题 = driver.find_element(By.CLASS_NAME, "title").text
+    assert 标题 == "Products", "标题不对"
+    数量 = len(driver.find_elements(By.CLASS_NAME, "inventory_item"))
+    assert 数量 == 6, "商品数量不对"
+    # ======== 自动批改 ========
+    assert "inventory" in url, f"❌ url 是 {url!r}"
+    assert 标题 == "Products", f"❌ 标题是 {标题!r}，应该是 'Products'"
+    assert 数量 == 6, f"❌ 商品数量是 {数量!r}，应该是 6"
 
 
 # ================================================================
@@ -135,7 +146,10 @@ def test_E4_多个账号都能登录(driver, username):
     """
     driver.get(BASE_URL)
     # ======== 你的代码写在这行下面（4 行）========
-
+    driver.get(BASE_URL)
+    driver.find.element(By.ID,"user-name").sent(username)
+    driver.find.element(By.ID,"password").sent(PASSWORD)
+    driver.find.element(By.ID,"button-login").click()
 
     # ======== 自动批改 ========
     # 点完登录按钮后网址不会立刻变，所以这里最多等 10 秒再看
@@ -173,8 +187,10 @@ def test_E5_错误输入应报错(driver, username, password, 关键字):
     """
     driver.get(BASE_URL)
     # ======== 你的代码写在这行下面（4~6 行）========
-
-
+    driver.get(BASE_URL)
+    driver.find_element(By.ID,"user-name").sent_keys(username)
+    driver.find_element(By.ID,"password").sent_keys(PASSWORD)
+    driver.find_element(By.ID,"login-button").click()
     # ======== 自动批改 ========
     # 报错提示要等一会儿才出现，所以这里最多等 10 秒
     from time import sleep
@@ -205,8 +221,7 @@ def test_E6_确认角标不存在(driver):
     """
     登录(driver)
     # ======== 你的代码写在这行下面（1 行）========
-
-
+    badges = driver.find.elements(By.CLASS,"shopping-cart")
     # ======== 自动批改 ========
     assert badges == [], f"❌ 还没加购，不该有角标，但找到了 {len(badges)} 个"
 
@@ -223,7 +238,6 @@ def test_E7_所有价格都以美元符开头(driver):
     """
     登录(driver)
     # ======== 你的代码写在这行下面（3~4 行）========
-
 
     # ======== 自动批改 ========
     assert len(prices) == 6, f"❌ 应该取到 6 个价格，你取到 {len(prices)} 个"

@@ -10,15 +10,16 @@ set TMP=%~dp0.tmp
 set TEMP=%~dp0.tmp
 set SE_CACHE_PATH=%~dp0.cache\selenium
 call .venv\Scripts\activate.bat
+if exist exercises\__pycache__ rmdir /s /q exercises\__pycache__
 echo ============================================
 echo    Run ONE exercise (about 5 seconds)
 echo ============================================
 echo.
-echo   A1-A6 / B1-B5 / C1-C5 / D1-D4   (basic set)
-echo   E1-E10                          (advanced set)
+echo   A1-A6 / B1-B5 / C1-C5 / D1-D4   (basic)
+echo   E1-E10                          (advanced)
 echo.
 set /p ex=Exercise: 
 echo.
-pytest exercises -k "%ex%" -v --tb=short
+pytest exercises/day4_practice.py exercises/day7_advanced.py -k "%ex%" -v --tb=short
 echo.
 pause

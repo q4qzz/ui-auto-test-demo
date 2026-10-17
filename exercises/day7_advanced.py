@@ -147,9 +147,9 @@ def test_E4_多个账号都能登录(driver, username):
     driver.get(BASE_URL)
     # ======== 你的代码写在这行下面（4 行）========
     driver.get(BASE_URL)
-    driver.find.element(By.ID,"user-name").sent(username)
-    driver.find.element(By.ID,"password").sent(PASSWORD)
-    driver.find.element(By.ID,"button-login").click()
+    driver.find_element(By.ID,"user-name").send_keys(username)
+    driver.find_element(By.ID,"password").send_keys(PASSWORD)
+    driver.find_element(By.ID,"login-button").click()
 
     # ======== 自动批改 ========
     # 点完登录按钮后网址不会立刻变，所以这里最多等 10 秒再看
@@ -188,8 +188,8 @@ def test_E5_错误输入应报错(driver, username, password, 关键字):
     driver.get(BASE_URL)
     # ======== 你的代码写在这行下面（4~6 行）========
     driver.get(BASE_URL)
-    driver.find_element(By.ID,"user-name").sent_keys(username)
-    driver.find_element(By.ID,"password").sent_keys(PASSWORD)
+    driver.find_element(By.ID,"user-name").send_keys(username)
+    driver.find_element(By.ID,"password").send_keys(password)
     driver.find_element(By.ID,"login-button").click()
     # ======== 自动批改 ========
     # 报错提示要等一会儿才出现，所以这里最多等 10 秒
@@ -221,7 +221,7 @@ def test_E6_确认角标不存在(driver):
     """
     登录(driver)
     # ======== 你的代码写在这行下面（1 行）========
-    badges = driver.find.elements(By.CLASS,"shopping-cart")
+    badges = driver.find_elements(By.CLASS_NAME,"shopping_cart_badge")
     # ======== 自动批改 ========
     assert badges == [], f"❌ 还没加购，不该有角标，但找到了 {len(badges)} 个"
 
@@ -238,7 +238,9 @@ def test_E7_所有价格都以美元符开头(driver):
     """
     登录(driver)
     # ======== 你的代码写在这行下面（3~4 行）========
-
+    prices = [e.text for e in driver.find_elements(By.CLASS_NAME, "inventory_item_price")]
+    for p in prices:
+        assert p.startswith("$"), f"❌ 价格 {p!r} 不以 $ 开头"          
     # ======== 自动批改 ========
     assert len(prices) == 6, f"❌ 应该取到 6 个价格，你取到 {len(prices)} 个"
     for p in prices:
@@ -252,8 +254,9 @@ def test_E8_所有商品名都不为空(driver):
     """
     登录(driver)
     # ======== 你的代码写在这行下面（3~4 行）========
-
-
+    names = [e.text for e in driver.find_elements(By.CLASS_NAME, "inventory_item_name")]
+    for n in names:
+        assert len(n) > 0, "❌ 有商品名是空的"
     # ======== 自动批改 ========
     assert len(names) == 6, f"❌ 应该取到 6 个商品名，你取到 {len(names)} 个"
     for n in names:
@@ -276,8 +279,11 @@ def test_E9_加购后按钮文字变成Remove(driver):
     """
     登录(driver)
     # ======== 你的代码写在这行下面（3 行）========
-
-
+    buttons = driver.find_elements(By.CSS_SELECTOR, ADD_TO_CART)
+    buttons[0].click()
+    remove_buttons = WebDriverWait(driver, 10).until(
+    EC.presence_of_all_elements_located((By.CSS_SELECTOR, "button[data-test^='remove']"))
+    )
     # ======== 自动批改 ========
     assert len(remove_buttons) == 1, (
         f"❌ 期望有 1 个 Remove 按钮，实际找到 {len(remove_buttons)} 个"
@@ -305,8 +311,17 @@ def test_E10_端到端综合(driver):
     """
     登录(driver)
     # ======== 你的代码写在这行下面（7 行）========
-
-
+    assert "inventory" in driver.current_url, "不在商品页"
+    assert len(driver.find_elements(By.CLASS_NAME, "inventory_item")) == 6, "商品数量不对"
+    记录的名字 = 读取文字列表(driver, "inventory_item_name")[:2]
+    for _ in range(2):
+        bs = driver.find_elements(By.CSS_SELECTOR, ADD_TO_CART)
+        bs[0].click()
+    n = int(driver.find_element(By.CLASS_NAME, BADGE).text)
+    assert n == 2, "角标不对"
+    driver.find_element(By.CLASS_NAME, "shopping_cart_link").click()
+    WebDriverWait(driver, 10).until(EC.presence_of_all_elements_located((By.CLASS_NAME, "cart_item")))
+    购物车名字 = 读取文字列表(driver, "inventory_item_name")
     # ======== 自动批改 ========
     assert 记录的名字 == 购物车名字, (
         f"❌ 不一致\n   记录：{记录的名字}\n   购物车：{购物车名字}"

@@ -1,9 +1,14 @@
 # ui-auto-test-demo
 
+[![Tests](https://github.com/q4qzz/ui-auto-test-demo/actions/workflows/test.yml/badge.svg)](https://github.com/q4qzz/ui-auto-test-demo/actions/workflows/test.yml)
+
 基于 pytest + Selenium 的 Web UI 自动化测试项目，被测对象为公开测试练习站点
 [Sauce Demo](https://www.saucedemo.com)。
 
 本项目用于系统练习软件测试的完整流程：**测试用例设计 → 手工测试 → 自动化实现 → 测试报告 → 持续集成**。
+
+> 每次 push 后，GitHub Actions 会在 Windows 环境中自动执行全部测试，
+> 结果和 HTML 测试报告可在 Actions 页面查看。
 
 ---
 

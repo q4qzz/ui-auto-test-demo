@@ -1,0 +1,53 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: 运行自动化测试
+    runs-on: windows-latest
+
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 检查 Edge 浏览器
+        run: |
+          if (Test-Path "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe") {
+            Write-Host "Edge 已安装"
+            (Get-Item "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe").VersionInfo.ProductVersion
+          } else {
+            Write-Host "Edge 未找到"
+            exit 1
+          }
+
+      - name: 运行测试
+        env:
+          HEADLESS: "1"
+          PYTHONIOENCODING: "utf-8"
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: python -m pytest
+
+      - name: 上传测试报告
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-report
+          path: reports/
+          retention-days: 30

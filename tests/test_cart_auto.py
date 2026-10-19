@@ -38,6 +38,7 @@ def test_add_two_items_and_check_cart(login_page):
     assert inventory.cart_badge_count == 2, f"❌ 角标应该是 2，实际是 {inventory.cart_badge_count}"
     # ---------- TODO 11：进入购物车页 ----------
     # 提示：cart = CartPage(login_page.driver).wait_until_loaded()
+    inventory.open_cart()
     cart = CartPage(login_page.driver).wait_until_loaded()
 
     # ---------- TODO 12：断言购物车里有 2 件商品 ----------

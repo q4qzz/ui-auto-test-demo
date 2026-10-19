@@ -29,15 +29,15 @@ class CartPage:
     # ★ 空 5：购物车里"一个条目"（一整行）的 class
     #   提示：探针会额外打印「购物车里一个条目的完整 HTML」，
     #        看最外层 <div class="..."> 里的内容
-    CART_ITEM = (By.CLASS_NAME, "★这里填★")
+    CART_ITEM = (By.CLASS_NAME, "cart_item")
 
     # ★ 空 6：条目里"商品名称"的 class
     #   提示：探针最后会打印「商品名元素的 class」，直接抄
-    ITEM_NAME = (By.CLASS_NAME, "★这里填★")
+    ITEM_NAME = (By.CLASS_NAME, "inventory_item_name")
 
     # ★ 空 7：结账按钮的 id
     #   提示：【第 3 页】的表格里，找文字是 Checkout 的那一行，看它的 id 列
-    CHECKOUT_BUTTON = (By.ID, "★这里填★")
+    CHECKOUT_BUTTON = (By.ID, "checkout")
 
     def __init__(self, driver, timeout=10):
         self.driver = driver
@@ -64,7 +64,7 @@ class CartPage:
         （看 docs/Selenium最小知识卡.md 最下面的「五分钟小测」）
         """
         items = self.driver.find_elements(*self.CART_ITEM)
-        return ★这里填★(items)
+        return len(items)
 
     # ---------- TODO 7：只填一行 ----------
     @property
@@ -78,7 +78,7 @@ class CartPage:
                提示：条目.find_element(*self.ITEM_NAME).text
         """
         items = self.driver.find_elements(*self.CART_ITEM)
-        return [★这里填★ for item in items]
+        return [item.find_element(*self.ITEM_NAME).text for item in items]
 
     # ---------- TODO 8：照抄示范，自己写 ----------
     def click_checkout(self):
@@ -88,4 +88,5 @@ class CartPage:
             self.driver.find_element(*self.某定位器).click()
             return self
         """
-        ★这一整行你自己写★
+        self.driver.find_element(*self.CHECKOUT_BUTTON).click()
+        return self
